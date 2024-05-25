@@ -3,6 +3,7 @@ import tensorflow
 import numpy as np
 import os
 
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 
@@ -555,8 +556,15 @@ def upload_file():
         if file.filename == '':
             return redirect(request.url)
         if file:
+            if not os.path.exists(app.config['UPLOAD_FOLDER']):
+                os.makedirs(app.config['UPLOAD_FOLDER'])
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            file.save(filepath)
+            try:
+                file.save(filepath)
+            except Exception as e:
+                print(f"Error saving file: {e}")
+                return "Error saving file"
+
             predicted_class, confidence = predictor(filepath)
             return render_template('result.html', predicted_class=predicted_class, confidence=confidence,
                                    image_path=filepath)
