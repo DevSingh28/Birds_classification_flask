@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birds Classifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="shortcut icon" href="../static/bird.png " type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload a Bird Image</h1>
+        <form method="post" enctype="multipart/form-data" onsubmit="return validateFile()">
+            <input type="file" name="file" class="file-input" accept="image/*" id="fileInput">
+            <p id="errorMsg" style="color: red;"></p>
+            <button type="submit" class="btn">Predict</button>
+        </form>
+    </div>
+    <script>
+        function validateFile() {
+            const fileInput = document.getElementById('fileInput');
+            const filePath = fileInput.value;
+            const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+            const errorMsg = document.getElementById('errorMsg');
+
+            if (!allowedExtensions.exec(filePath)) {
+                errorMsg.textContent = 'Please upload a valid image file (jpg, jpeg, png, gif).';
+                fileInput.value = '';
+                return false;
+            }
+
+            errorMsg.textContent = '';
+            return true;
+        }
+    </script>
+</body>
+</html>
